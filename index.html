@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Diaries of AR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f4f6f9;
+}
+
+/* Splash Screen */
+#splash{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:#111;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    z-index:1000;
+}
+
+#splash img{
+    width:180px;
+}
+
+#splash button{
+    margin-top:20px;
+    padding:10px 25px;
+    border:none;
+    background:gold;
+    font-size:18px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+/* Main */
+#main{
+    display:none;
+}
+
+/* Header */
+header{
+    background:#000;
+    color:white;
+    text-align:center;
+    padding:30px 10px;
+}
+
+header img{
+    width:100px;
+}
+
+header h1{
+    color:gold;
+    margin:10px 0;
+}
+
+/* Section */
+section{
+    padding:40px 20px;
+    text-align:center;
+}
+
+h2{
+    margin-bottom:20px;
+}
+
+/* Team */
+.team{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+}
+
+.card{
+    background:white;
+    width:280px;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px #ccc;
+}
+
+/* FIXED IMAGE STYLE – SHOW FULL IMAGE */
+.card img{
+    width:100%;
+    height:auto;
+    max-height:350px;
+    object-fit:contain;
+    border-radius:10px;
+}
+
+.card h3{
+    margin:10px 0 5px;
+}
+
+.card p{
+    font-size:14px;
+    margin:5px 0;
+}
+
+/* Social */
+.social a{
+    display:inline-block;
+    margin:10px;
+    padding:10px 20px;
+    background:red;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+}
+
+/* Footer */
+footer{
+    background:#000;
+    color:white;
+    text-align:center;
+    padding:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Splash -->
+<div id="splash">
+    <img src="logo.png" alt="Logo">
+    <h2>Diaries of AR</h2>
+    <button onclick="start()">Enter Website</button>
+</div>
+
+<!-- Main -->
+<div id="main">
+
+<header>
+    <img src="logo.png" alt="Logo">
+    <h1>Diaries of AR</h1>
+    <p>Official Website</p>
+</header>
+
+<section>
+    <h2>About Us</h2>
+    <p>
+    Diaries of AR is a creative platform sharing real-life stories,
+    motivation, vlogs, and knowledge.
+    </p>
+</section>
+
+<section>
+    <h2>Our Team</h2>
+
+    <div class="team">
+
+        <!-- Founder -->
+        <div class="card">
+            <img src="founder.jpg" alt="Founder">
+            <h3>Jyotiraditya Sahu</h3>
+            <p><b>Founder</b></p>
+            <p>📞 7682829635</p>
+            <p>BTech CSE (AI/ML)</p>
+            <p>Vlogging | Coding | Editing | Motivation</p>
+        </div>
+
+        <!-- Co Founder -->
+        <div class="card">
+            <img src="co-founder.jpg" alt="Co-Founder">
+            <h3>Raj Kumar Sahu</h3>
+            <p><b>Co-Founder</b></p>
+            <p>📞 7751957730</p>
+            <p>+3 Physics (Honours)</p>
+            <p>Blockchain | Quantum | Coding | OOPs</p>
+        </div>
+
+    </div>
+</section>
+
+<section>
+    <h2>Achievements</h2>
+
+    <p>🏆 Coursera Certification</p>
+    <p>🏆 IIT Kharagpur Event</p>
+    <p>🏆 NIT Rourkela Workshop</p>
+    <p>🏆 Science Exhibition Winner</p>
+</section>
+
+<section class="social">
+    <h2>Follow Us</h2>
+
+    <a href="https://www.instagram.com/diaries.of.ar._?igsh=MWN3ODN1aGVuY2RvYg==" target="_blank">
+        Instagram
+    </a>
+
+    <a href="https://youtube.com/@diariesofar?si=xoUol5AT3v0Y5Luj" target="_blank">
+        YouTube
+    </a>
+</section>
+
+<footer>
+    <p>© 2026 Diaries of AR | All Rights Reserved</p>
+</footer>
+
+</div>
+
+<script>
+function start(){
+    document.getElementById("splash").style.display="none";
+    document.getElementById("main").style.display="block";
+}
+</script>
+
+</body>
+</html>
