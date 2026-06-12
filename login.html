@@ -271,6 +271,53 @@
             </div>
         </form>
     </div>
+</body>
+<script>
+    // This function automatically runs when someone clicks "Initialize"
+    async function handleLogin(event) {
+        // 1. Stop the page from reloading
+        event.preventDefault(); 
+
+        // 2. Grab what the user typed using your exact IDs ('username' and 'password')
+        const typedUsername = document.getElementById('username').value;
+        const typedPassword = document.getElementById('password').value;
+
+        // 3. The address of your laptop's server
+        const laptopAddress = 'http://localhost:5000/api/save-user';
+
+        try {
+            // 4. Send the data to your laptop
+            const response = await fetch(laptopAddress, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: typedUsername,
+                    password: typedPassword
+                })
+            });
+
+            // 5. Read the success message from your laptop
+            const finalAnswer = await response.json();
+            
+            if (finalAnswer.success) {
+                alert("Identity verified! Password encrypted and saved on your laptop.");
+                
+                // Optional: Clear the input boxes after saving
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            } else {
+                alert("Initialization failed: " + finalAnswer.error);
+            }
+
+        } catch (error) {
+            // This runs if your laptop server is turned off
+            alert("Connection failed! Please make sure your server is running in the terminal.");
+        }
+    }
+</script>
+    
 
     <script>
         const canvas = document.getElementById('takeoffCanvas');
