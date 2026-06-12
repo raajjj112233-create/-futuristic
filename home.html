@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Portal</title>
+
+<style>
+
+:root{
+    --bg-color:#05050a;
+    --panel-bg:rgba(10,10,25,0.75);
+    --neon-cyan:#00f3ff;
+    --neon-magenta:#ff0055;
+    --text-color:#e0e0ff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background-color:var(--bg-color);
+    background-image:
+        radial-gradient(at 10% 20%, rgba(0,243,255,.15) 0px, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(255,0,85,.15) 0px, transparent 50%);
+    min-height:100vh;
+    color:var(--text-color);
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size:30px 30px;
+    z-index:-1;
+}
+
+header{
+    padding:25px;
+    text-align:center;
+    border-bottom:1px solid rgba(0,243,255,.2);
+}
+
+header h1{
+    color:white;
+    letter-spacing:3px;
+    text-shadow:0 0 15px rgba(0,243,255,.5);
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:30px;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:var(--panel-bg);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(0,243,255,.2);
+    border-radius:15px;
+    padding:25px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 20px rgba(0,243,255,.2);
+}
+
+.card h3{
+    color:var(--neon-cyan);
+    margin-bottom:15px;
+}
+
+.card p{
+    color:#ccc;
+}
+
+.actions{
+    margin-top:40px;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:14px 25px;
+    border:none;
+    cursor:pointer;
+    border-radius:8px;
+    font-weight:bold;
+    letter-spacing:1px;
+    transition:.3s;
+}
+
+.primary{
+    background:transparent;
+    color:white;
+    border:1px solid var(--neon-cyan);
+}
+
+.primary:hover{
+    background:var(--neon-cyan);
+    color:black;
+}
+
+.logout{
+    background:transparent;
+    color:white;
+    border:1px solid var(--neon-magenta);
+}
+
+.logout:hover{
+    background:var(--neon-magenta);
+}
+
+.footer{
+    text-align:center;
+    padding:30px;
+    color:#888;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<script>
+if(localStorage.getItem("loggedIn") !== "true"){
+    window.location.href = "login.html";
+}
+</script>
+
+<header>
+    <h1>WELCOME TO THE CONTROL CENTER</h1>
+</header>
+
+<div class="container">
+
+```
+<div class="dashboard">
+
+    <div class="card">
+        <h3>Profile</h3>
+        <p>Manage your account information.</p>
+    </div>
+
+    <div class="card">
+        <h3>Projects</h3>
+        <p>Access all your current projects.</p>
+    </div>
+
+    <div class="card">
+        <h3>Analytics</h3>
+        <p>View statistics and activity reports.</p>
+    </div>
+
+    <div class="card">
+        <h3>Settings</h3>
+        <p>Configure your portal preferences.</p>
+    </div>
+
+</div>
+
+<div class="actions">
+
+    <button class="btn primary">
+        Open Dashboard
+    </button>
+
+    <button class="btn logout" onclick="logout()">
+        Logout
+    </button>
+
+</div>
+```
+
+</div>
+
+<div class="footer">
+    Secure Access Portal
+</div>
+
+<script>
+
+function logout(){
+
+    localStorage.removeItem("loggedIn");
+
+    window.location.href = "login.html";
+
+}
+
+</script>
+
+</body>
+</html>
