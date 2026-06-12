@@ -267,7 +267,9 @@
             
             <div class="utilities">
                 <a href="#">Forgot Pass?</a>
-                <a href="#">Create Identity</a>
+                <a href="#" onclick="registerUser()">
+                    Create Identity
+                </a>
             </div>
         </form>
     </div>
@@ -458,48 +460,51 @@
           
         }
 
-        async function loginUser(event) {
+        async function loginUser(event){
     
             event.preventDefault();
 
             const username =    
                 document.getElementById("username").value;
 
-            const password =    
+            const password =
                 document.getElementById("password").value;
-    
-            try {
+
+            try{
 
                 const response = await fetch(
-                    "http://10.41.50.248:3000/login",
+                    "https://consists-emerald-circuit-sperm.trycloudflare.com/login",
                     {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
+                        method:"POST",
+                        headers:{
+                            "Content-Type":"application/json"
                         },
-                        body: JSON.stringify({
+                        body:JSON.stringify({
                             username,
                             password
                         })
-                    }        
+                    }
                 );
         
-                const data = await response.json();
+                const result =        
+                    await response.json();
         
-                if(data.success){
-        
+                if(result.success){
+    
                     handleLogin();
-        
+    
                 }else{
-        
-                    alert(data.message);
-        
+    
+                    alert(result.message);
+    
                 }
     
-            } catch(error){
-
-                alert("Server not reachable");
+            }catch(error){
+    
+                alert("Server Offline");
+    
             }
+
         }
 
     </script>
