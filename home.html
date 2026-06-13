@@ -136,16 +136,37 @@ header h1{
     color:#888;
 }
 
+#userDisplay{
+    position: fixed;
+    top: 15px;
+    left: 20px;
+    color: #00f3ff;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0,243,255,.5);
+    z-index: 9999;
+}
+
 </style>
 
 </head>
 
 <body>
-
+<div id="userDisplay"></div>
 <script>
 if(localStorage.getItem("loggedIn") !== "true"){
     window.location.href = "login.html";
 }
+
+const username = localStorage.getItem("username");
+
+if(username){
+
+    document.getElementById("userDisplay").textContent =
+        "User: " + username;
+
+}
+
 </script>
 
 <header>
@@ -203,6 +224,7 @@ if(localStorage.getItem("loggedIn") !== "true"){
 function logout(){
 
     localStorage.removeItem("loggedIn");
+    localStorage.removeItem("username");
 
     window.location.href = "login.html";
 
