@@ -526,14 +526,19 @@
                     const db = event.target.result;
 
                     if(!db.objectStoreNames.contains("users")){
-
                         db.createObjectStore(
                             "users",
-                            { keyPath:"username" }    
-                        );
-    
+                            { keyPath:"username" }
+                       );
                     }
-    
+
+                    if(!db.objectStoreNames.contains("pendingUsers")){
+                        db.createObjectStore(
+                            "pendingUsers",
+                            { keyPath:"username" }
+                        );
+                    }
+                            
                 };
 
                 request.onsuccess =    
@@ -545,6 +550,124 @@
             });
 
         }
+
+
+        async function savePendingUser(
+            username,
+            password
+            ){
+
+            const db = await openDB();
+
+            const tx =
+                db.transaction(
+                "pendingUsers",
+                "readwrite"
+                );
+
+            const store =
+                tx.objectStore(
+                "pendingUsers"
+                );
+
+            store.put({
+                username,
+                password,
+                createdAt:
+                    Date.now()
+            });
+
+        }
+
+
+        async function syncPendingUsers(){
+
+            const db =
+                await openDB();
+
+            const tx =
+                db.transaction(
+                    "pendingUsers",
+                    "readonly"
+                );
+
+            const store =
+                tx.objectStore(
+                    "pendingUsers"
+                );
+
+            const request =
+                store.getAll();
+
+            request.onsuccess =
+            async ()=>{
+
+                const users =
+                    request.result;
+
+                for(const user of users){
+
+                    try{
+
+                        const response =
+                            await fetch(
+                                "https://successfully-shine-settings-distribute.trycloudflare.com/register",
+                                {
+                                    method:"POST",
+                                    headers:{
+                                        "Content-Type":
+                                        "application/json"
+                                    },
+                                    body:JSON.stringify({
+                                        username:
+                                            user.username,
+                                        password:
+                                            user.password
+                                    })
+                                }
+                            );
+
+                        const result =
+                            await response.json();
+
+                        if(result.success){
+
+                            const deleteTx =
+                                db.transaction(
+                                    "pendingUsers",
+                                    "readwrite"
+                                );
+
+                            deleteTx
+                            .objectStore(
+                                "pendingUsers"
+                            )
+                            .delete(
+                                user.username
+                            );
+
+                            console.log(
+                                "Synced:",
+                                user.username
+                            );
+
+                        }
+
+                    }catch(err){
+
+                        console.log(
+                            "Still offline"
+                        );
+
+                    }
+
+                }
+
+            };
+
+        }
+
+
 
 
 
@@ -561,7 +684,7 @@
             try{
 
                 const response = await fetch(
-                    "https://hereby-emerald-citysearch-presenting.trycloudflare.com/login",
+                    "https://successfully-shine-settings-distribute.trycloudflare.com/login",
                     {
                         method:"POST",
                         headers:{
@@ -648,7 +771,7 @@
             try {
 
                 const response = await fetch(
-                    "https://hereby-emerald-citysearch-presenting.trycloudflare.com/register",
+                    "https://successfully-shine-settings-distribute.trycloudflare.com/register",
     
                     {
                         method: "POST",
@@ -678,14 +801,36 @@
                 }
         
             } catch(error){
-        
-                console.error(error);
-        
-                alert("Unable to connect to server");
+
+                await savePendingUser(
+                    username,
+                    password
+                );
+
+                await saveUserLocally(
+                    username
+                );
+
+                alert(
+                    "Offline registration saved. Will sync automatically."
+                );
 
             }
+ 
         }
+
+
+        window.addEventListener(
+            "online",
+            ()=>{
+                syncPendingUsers();
+            }
+        );
+
+
+
 
 
 
     </script>
+
