@@ -3,173 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Market</title>
+    <title>Home Portal</title>
     <style>
-        :root {
-            --bg-color: #05050a;
-            --panel-bg: rgba(10, 10, 25, 0.75);
-            --neon-cyan: #00f3ff;
-            --neon-magenta: #ff0055;
-            --text-color: #e0e0ff;
+        :root{
+            --bg-color:#05050a;
+            --panel-bg:rgba(10,10,25,0.75);
+            --neon-cyan:#00f3ff;
+            --neon-magenta:#ff0055;
+            --text-color:#e0e0ff;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
         }
-
-        body {
-            background-color: var(--bg-color);
-            background-image: radial-gradient(at 10% 20%, rgba(0,243,255,.15) 0px, transparent 50%), 
-                              radial-gradient(at 90% 80%, rgba(255,0,85,.15) 0px, transparent 50%);
-            min-height: 100vh;
-            color: var(--text-color);
-            overflow-x: hidden;
+        body{
+            background-color:var(--bg-color);
+            background-image: radial-gradient(at 10% 20%, rgba(0,243,255,.15) 0px, transparent 50%), radial-gradient(at 90% 80%, rgba(255,0,85,.15) 0px, transparent 50%);
+            min-height:100vh;
+            color:var(--text-color);
+            overflow-x:hidden;
         }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), 
-                              linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-            z-index: -1;
+        body::before{
+            content:"";
+            position:fixed;
+            inset:0;
+            background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+            background-size:30px 30px;
+            z-index:-1;
         }
-
-        header {
-            padding: 25px;
-            text-align: center;
-            border-bottom: 1px solid rgba(0,243,255,.2);
+        header{
+            padding:25px;
+            text-align:center;
+            border-bottom:1px solid rgba(0,243,255,.2);
         }
-
-        header h1 {
-            color: white;
-            letter-spacing: 3px;
-            text-shadow: 0 0 15px rgba(0,243,255,.5);
+        header h1{
+            color:white;
+            letter-spacing:3px;
+            text-shadow:0 0 15px rgba(0,243,255,.5);
         }
-
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 30px;
+        .container{
+            max-width:1200px;
+            margin:auto;
+            padding:30px;
         }
-
-        /* --- Bento Grid Implementation --- */
+        
+        /* Bento Grid Layout Configuration */
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             grid-auto-rows: minmax(160px, auto);
             gap: 20px;
         }
-
-        .card {
-            background: var(--panel-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0,243,255,.2);
-            border-radius: 15px;
-            padding: 25px;
-            transition: .3s;
+        .card{
+            background:var(--panel-bg);
+            backdrop-filter:blur(10px);
+            border:1px solid rgba(0,243,255,.2);
+            border-radius:15px;
+            padding:25px;
+            transition:.3s;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
-
-        /* Bento Asymmetric Spanning */
-        .card.large {
+        .card:hover{
+            transform:translateY(-5px);
+            box-shadow:0 0 20px rgba(0,243,255,.2);
+        }
+        
+        /* Specific Bento Span Placements */
+        .card-profile {
             grid-column: span 2;
             grid-row: span 2;
         }
-
-        .card.wide {
+        .card-projects {
             grid-column: span 2;
+            grid-row: span 1;
+        }
+        .card-analytics {
+            grid-column: span 1;
+            grid-row: span 1;
+        }
+        .card-settings {
+            grid-column: span 1;
+            grid-row: span 1;
         }
 
-        .card.tall {
-            grid-row: span 2;
+        .card h3{
+            color:var(--neon-cyan);
+            margin-bottom:15px;
+            font-size: 1.5rem;
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 20px rgba(0,243,255,.2);
+        .card p{
+            color:#ccc;
+            font-size: 1rem;
+            line-height: 1.4;
         }
-
-        .card h3 {
-            color: var(--neon-cyan);
-            margin-bottom: 15px;
-            font-size: 1.4rem;
+        .actions{
+            margin-top:40px;
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            flex-wrap:wrap;
         }
-
-        .card p {
-            color: #ccc;
-            line-height: 1.5;
+        .btn{
+            padding:14px 25px;
+            border:none;
+            cursor:pointer;
+            border-radius:8px;
+            font-weight:bold;
+            letter-spacing:1px;
+            transition:.3s;
         }
-
-        /* Responsive Layout for Tablet/Mobile */
-        @media (max-width: 900px) {
-            .dashboard {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .card.large, .card.wide, .card.tall {
-                grid-column: span 1;
-                grid-row: span 1;
-            }
+        .primary{
+            background:transparent;
+            color:white;
+            border:1px solid var(--neon-cyan);
         }
-
-        @media (max-width: 600px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
+        .primary:hover{
+            background:var(--neon-cyan);
+            color:black;
         }
-
-        .actions {
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+        .logout{
+            background:transparent;
+            color:white;
+            border:1px solid var(--neon-magenta);
         }
-
-        .btn {
-            padding: 14px 25px;
-            border: none;
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            transition: .3s;
+        .logout:hover{
+            background:var(--neon-magenta);
         }
-
-        .primary {
-            background: transparent;
-            color: white;
-            border: 1px solid var(--neon-cyan);
+        .footer{
+            text-align:center;
+            padding:30px;
+            color:#888;
         }
-
-        .primary:hover {
-            background: var(--neon-cyan);
-            color: black;
-        }
-
-        .logout {
-            background: transparent;
-            color: white;
-            border: 1px solid var(--neon-magenta);
-        }
-
-        .logout:hover {
-            background: var(--neon-magenta);
-        }
-
-        .footer {
-            text-align: center;
-            padding: 30px;
-            color: #888;
-        }
-
-        #userDisplay {
+        #userDisplay{
             position: fixed;
             top: 15px;
             left: 20px;
@@ -178,6 +147,17 @@
             letter-spacing: 1px;
             text-shadow: 0 0 10px rgba(0,243,255,.5);
             z-index: 9999;
+        }
+
+        /* Responsive design for tablets and mobile viewports */
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .card-profile, .card-projects, .card-analytics, .card-settings {
+                grid-column: span 2;
+                grid-row: auto;
+            }
         }
     </style>
 </head>
@@ -192,48 +172,36 @@
             document.getElementById("userDisplay").textContent = "User: " + username;
         }
     </script>
-
     <header>
         <h1>WELCOME TO THE SOFTWARE MARKET</h1>
     </header>
-
     <div class="container">
         <div class="dashboard">
-            <!-- Large main feature block -->
-            <div class="card large">
-                <h3>Projects</h3>
-                <p>Access all your current software builds, repositories, and deployment lifecycles from one unified space.</p>
-            </div>
-            
-            <!-- Tall sidebar style block -->
-            <div class="card tall">
-                <h3>Analytics</h3>
-                <p>View granular statistics, processing usage metrics, user conversion funnels, and performance reports.</p>
-            </div>
-            
-            <!-- Standard block -->
-            <div class="card">
+            <div class="card card-profile">
                 <h3>Profile</h3>
-                <p>Manage your developer credentials, billing methods, and public store profiles.</p>
+                <p>Manage your account information, update personal configurations, security credentials, and API access tokens.</p>
             </div>
-            
-            <!-- Standard block -->
-            <div class="card">
+            <div class="card card-projects">
+                <h3>Projects</h3>
+                <p>Access all your current projects and operational deployments.</p>
+            </div>
+            <div class="card card-analytics">
+                <h3>Analytics</h3>
+                <p>View real-time statistics and activity reports.</p>
+            </div>
+            <div class="card card-settings">
                 <h3>Settings</h3>
-                <p>Configure ecosystem preferences, global API keys, and deployment webhooks.</p>
+                <p>Configure your portal market preferences.</p>
             </div>
         </div>
-
         <div class="actions">
-            <button class="btn primary">Open Dashboard</button>
-            <button class="btn logout" onclick="logout()">Logout</button>
+            <button class="btn primary"> Open Dashboard </button>
+            <button class="btn logout" onclick="logout()"> Logout </button>
         </div>
     </div>
-
     <div class="footer">
         Secure Access Portal
     </div>
-
     <script>
         function logout(){
             localStorage.removeItem("loggedIn");
