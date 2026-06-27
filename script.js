@@ -536,7 +536,7 @@ async function syncPendingUsers() {
 
                     const response =
                         await fetch(
-                            "https://beds-heat-make-pixel.trycloudflare.com/register",
+                            " https://burton-andrew-alfred-grand.trycloudflare.com/register",
                             {
                                 method: "POST",
 
@@ -638,7 +638,7 @@ async function loginUser(event) {
 
         const response =
             await fetch(
-                "https://beds-heat-make-pixel.trycloudflare.com/login",
+                " https://burton-andrew-alfred-grand.trycloudflare.com/login",
                 {
                     method: "POST",
 
@@ -754,7 +754,7 @@ async function registerUser() {
 
         const response =
             await fetch(
-                "https://beds-heat-make-pixel.trycloudflare.com/register",
+                " https://burton-andrew-alfred-grand.trycloudflare.com/register",
                 {
                     method: "POST",
 
