@@ -725,6 +725,123 @@ header{
     }
 
 }
+
+.software-card{
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(15,15,35,.9),
+        rgba(5,5,20,.9)
+    );
+
+    border:1px solid rgba(0,243,255,.15);
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    transition:.35s;
+}
+
+.software-card:hover{
+
+    transform:
+    translateY(-8px);
+
+    box-shadow:
+    0 0 30px rgba(0,243,255,.25);
+
+}
+
+.card-banner{
+
+    height:180px;
+
+    font-size:80px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,243,255,.25),
+        rgba(255,0,85,.25)
+    );
+
+}
+
+.card-content{
+
+    padding:20px;
+}
+
+.card-content h3{
+
+    color:white;
+
+    margin-bottom:10px;
+}
+
+.card-meta{
+
+    margin-bottom:8px;
+
+    opacity:.9;
+
+    font-size:14px;
+}
+
+.software-icon{
+
+    width:100px;
+
+    height:100px;
+
+    object-fit:contain;
+
+    border-radius:20px;
+
+    background:white;
+
+    padding:10px;
+
+    box-shadow:
+    0 0 20px rgba(0,243,255,.3);
+
+}
+
+/* LOCK PAGE SCROLL WHEN MODAL OPEN */
+
+body.modal-open{
+
+    overflow:hidden;
+
+    height:100vh;
+
+}
+
+/* UPLOAD MODAL SCROLL */
+
+.upload-modal{
+
+    overflow-y:auto;
+
+}
+
+.upload-modal-content{
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
+}
+
+
 </style>
 </head>
 
@@ -862,6 +979,7 @@ header{
                     <img
                         src="https://images.unsplash.com/photo-1639322537228-f710d846310a?w=800"
                         alt="Network Globe"
+                        class="network-image"
                     >
 
                 </div>
@@ -1002,6 +1120,14 @@ header{
         "
     >
 
+    <div
+        id="modalIconContainer"
+        style="
+            text-align:center;
+            margin-bottom:20px;
+        "
+    ></div>
+
         <h2
             id="modalTitle"
             style="
@@ -1108,6 +1234,12 @@ header{
                 placeholder="Developer"
             >
 
+            <input
+                type="text"
+                id="version"
+                placeholder="Version (Example: 1.0.0)"
+            >
+
             <select id="category">
 
                 <option value="">
@@ -1140,6 +1272,23 @@ header{
                 id="description"
                 placeholder="Description"
             ></textarea>
+
+            <label
+            style="
+            color:#00f3ff;
+            font-weight:bold;
+            "
+            >
+                Software Icon
+            </label>
+
+            <input
+                type="file"
+                id="softwareIcon"
+                accept="image/*"
+            >
+
+            
 
             <div class="file-box">
 
@@ -1365,6 +1514,14 @@ document
         .value
         .trim();
 
+        const version =
+        document
+        .getElementById(
+            "version"
+        )
+        .value
+        .trim();
+
         const category =
         document
         .getElementById(
@@ -1380,6 +1537,13 @@ document
         .value
         .trim();
 
+        const iconFile =
+        document
+        .getElementById(
+            "softwareIcon"
+        )
+        .files[0];
+
         const file =
         document
         .getElementById(
@@ -1387,9 +1551,13 @@ document
         )
         .files[0];
 
+        
+
+        
         if(
             !name ||
             !developer ||
+            !version ||
             !category ||
             !file
         ){
@@ -1401,13 +1569,42 @@ document
             return;
         }
 
+        
+
+        let iconData = "";
+
+        if(iconFile){
+
+            iconData =
+            await new Promise(resolve=>{
+
+                const reader =
+                new FileReader();
+
+                reader.onload =
+                e => resolve(
+                    e.target.result
+                );
+
+                reader.readAsDataURL(
+                    iconFile
+                );
+
+            });
+
+        }
+
         const software = {
 
             id: Date.now(),
 
             name,
 
+            version,
+
             developer,
+
+            icon: iconData,
 
             category,
 
@@ -1485,43 +1682,95 @@ async function renderSoftware(){
 
             card.innerHTML = `
 
-                <div class="card-banner">
-                    💾
+            <div class="card-banner">
+
+                ${
+                    software.icon
+                    ?
+
+                    `<img
+                        src="${software.icon}"
+                        class="software-icon"
+                    >`
+
+                    :
+
+                    "💾"
+                }
+
+            </div>
+            <div class="card-content">
+
+                <h3>
+                    ${software.name}
+                </h3>
+
+                <div class="card-meta">
+                    Version ${software.version || "1.0.0"}
                 </div>
 
-                <div class="card-content">
+                <div class="card-meta">
 
-                    <h3>
-                        ${software.name}
-                    </h3>
+                    ${software.developer}
 
-                    <div class="card-meta">
-                        ${software.developer}
-                    </div>
-
-                    <div class="card-meta">
-                        ${software.category}
-                    </div>
-
-                    <div class="card-actions">
-
-                        <button
-                            class="download-btn"
-                            onclick="downloadSoftware(${software.id})"
-                        >
-                            Download
-                        </button>
-
-                        <button
-                            class="details-btn"
-                            onclick="showDetails(${software.id})"
-                        >
-                            Details
-                        </button>
-
-                    </div>
+                    ${
+                        software.verified
+                        ?
+                        '<span style="color:#00ff99"> ✓ Verified</span>'
+                        :
+                        ''
+                    }
 
                 </div>
+
+                <div class="card-meta">
+                    ${software.category}
+                </div>
+
+                <div class="card-meta">
+                    ⭐ ${software.rating || 0}
+                </div>
+
+                <div class="card-meta">
+                    ↓ ${
+                        software.downloads
+                        ?
+                        software.downloads.toLocaleString()
+                        :
+                        0
+                    } Downloads
+                </div>
+
+                <div class="card-meta">
+                    ${software.fileSize || "Unknown"}
+                </div>
+
+                <div class="card-meta">
+                    Trust Score:
+                    <span style="color:#00ff99">
+                        ${software.trustScore || 0}/100
+                    </span>
+                </div>
+
+                <div class="card-actions">
+
+                    <button
+                        class="download-btn"
+                        onclick="downloadSoftware(${software.id})"
+                    >
+                        Download
+                    </button>
+
+                    <button
+                        class="details-btn"
+                        onclick="showDetails(${software.id})"
+                    >
+                        Details
+                    </button>
+
+                </div>
+
+            </div>
 
             `;
 
@@ -1622,6 +1871,30 @@ function showDetails(id){
     software;
 
     document.getElementById(
+        "modalIconContainer"
+    ).innerHTML =
+
+    software.icon
+
+    ?
+
+    `<img
+        src="${software.icon}"
+        style="
+            width:120px;
+            height:120px;
+            object-fit:contain;
+            border-radius:20px;
+        "
+    >`
+
+    :
+
+    "";
+
+
+
+    document.getElementById(
         "modalTitle"
     ).innerText =
     software.name;
@@ -1635,8 +1908,14 @@ function showDetails(id){
     document.getElementById(
         "modalCategory"
     ).innerHTML =
+
     "<strong>Category:</strong> " +
-    software.category;
+    software.category +
+
+    "<br><strong>Version:</strong> " +
+    (software.version || "1.0.0");
+
+
 
     document.getElementById(
         "modalDate"
@@ -1655,6 +1934,10 @@ function showDetails(id){
     ).style.display =
     "flex";
 
+    document.body.classList.add(
+        "modal-open"
+    );
+
 }
 
 /* =========================================
@@ -1667,6 +1950,10 @@ function closeModal(){
         "softwareModal"
     ).style.display =
     "none";
+
+    document.body.classList.remove(
+        "modal-open"
+    );
 
 }
 
@@ -1832,21 +2119,27 @@ async function createDemoData(){
 
             name:"Cyber Studio",
 
+            version:"2.3.1",
+
             developer:"Nexus Labs",
 
             category:"Development",
 
-            description:
-            "Advanced futuristic development toolkit.",
+            rating:4.8,
 
-            fileName:
-            "cyberstudio.zip",
+            downloads:120430,
 
-            fileSize:
-            24500000,
+            fileSize:"245 MB",
 
-            uploadDate:
-            new Date().toLocaleString()
+            trustScore:96,
+
+            verified:true,
+
+            logo:"💻",
+
+            description:"Advanced futuristic development toolkit.",
+
+            uploadDate:new Date().toLocaleString()
         },
 
         {
@@ -1854,21 +2147,27 @@ async function createDemoData(){
 
             name:"Quantum Player",
 
+            version:"5.1.0",
+
             developer:"Media Core",
 
             category:"Multimedia",
 
-            description:
-            "High-performance media player with futuristic rendering engine.",
+            rating:4.6,
 
-            fileName:
-            "quantumplayer.exe",
+            downloads:85600,
 
-            fileSize:
-            18500000,
+            fileSize:"120 MB",
 
-            uploadDate:
-            new Date().toLocaleString()
+            trustScore:92,
+
+            verified:true,
+
+            logo:"🎵",
+
+            description:"High-performance media player.",
+
+            uploadDate:new Date().toLocaleString()
         },
 
         {
@@ -1876,21 +2175,27 @@ async function createDemoData(){
 
             name:"Secure Vault",
 
+            version:"1.8.4",
+
             developer:"Security Systems",
 
             category:"Security",
 
-            description:
-            "Encrypted storage and password management solution.",
+            rating:4.9,
 
-            fileName:
-            "securevault.exe",
+            downloads:213000,
 
-            fileSize:
-            12000000,
+            fileSize:"85 MB",
 
-            uploadDate:
-            new Date().toLocaleString()
+            trustScore:99,
+
+            verified:true,
+
+            logo:"🔐",
+
+            description:"Encrypted storage and password manager.",
+
+            uploadDate:new Date().toLocaleString()
         }
 
     ];
@@ -2070,6 +2375,10 @@ document.addEventListener(
                     modal.style.display =
                     "flex";
 
+                    document.body.classList.add(
+                        "modal-open"
+                    );
+
                     setTimeout(()=>{
 
                         modal.classList.add(
@@ -2097,10 +2406,12 @@ function closeUploadModal(){
         "uploadModal"
     );
 
-    if(!modal) return;
-
     modal.classList.remove(
         "active"
+    );
+
+    document.body.classList.remove(
+        "modal-open"
     );
 
     setTimeout(()=>{
@@ -2173,21 +2484,22 @@ function openMobileDashboard(){
     modal.style.display =
     "block";
 
+    document.body.classList.add(
+        "modal-open"
+    );
+
 }
 
 function closeMobileDashboard(){
 
-    const modal =
     document.getElementById(
         "mobileDashboardModal"
+    ).style.display =
+    "none";
+
+    document.body.classList.remove(
+        "modal-open"
     );
-
-    if(modal){
-
-        modal.style.display =
-        "none";
-
-    }
 
 }
 
