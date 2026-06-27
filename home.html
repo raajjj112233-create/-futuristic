@@ -1,213 +1,2287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Portal</title>
-    <style>
-        :root{
-            --bg-color:#05050a;
-            --panel-bg:rgba(10,10,25,0.75);
-            --neon-cyan:#00f3ff;
-            --neon-magenta:#ff0055;
-            --text-color:#e0e0ff;
-        }
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:'Segoe UI',sans-serif;
-        }
-        body{
-            background-color:var(--bg-color);
-            background-image: radial-gradient(at 10% 20%, rgba(0,243,255,.15) 0px, transparent 50%), radial-gradient(at 90% 80%, rgba(255,0,85,.15) 0px, transparent 50%);
-            min-height:100vh;
-            color:var(--text-color);
-            overflow-x:hidden;
-        }
-        body::before{
-            content:"";
-            position:fixed;
-            inset:0;
-            background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-            background-size:30px 30px;
-            z-index:-1;
-        }
-        header{
-            padding:25px;
-            text-align:center;
-            border-bottom:1px solid rgba(0,243,255,.2);
-        }
-        header h1{
-            color:white;
-            letter-spacing:3px;
-            text-shadow:0 0 15px rgba(0,243,255,.5);
-        }
-        .container{
-            max-width:1200px;
-            margin:auto;
-            padding:30px;
-        }
-        
-        /* Bento Grid Layout Configuration */
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: minmax(160px, auto);
-            gap: 20px;
-        }
-        .card{
-            background:var(--panel-bg);
-            backdrop-filter:blur(10px);
-            border:1px solid rgba(0,243,255,.2);
-            border-radius:15px;
-            padding:25px;
-            transition:.3s;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .card:hover{
-            transform:translateY(-5px);
-            box-shadow:0 0 20px rgba(0,243,255,.2);
-        }
-        
-        /* Specific Bento Span Placements */
-        .card-profile {
-            grid-column: span 2;
-            grid-row: span 2;
-        }
-        .card-projects {
-            grid-column: span 2;
-            grid-row: span 1;
-        }
-        .card-analytics {
-            grid-column: span 1;
-            grid-row: span 1;
-        }
-        .card-settings {
-            grid-column: span 1;
-            grid-row: span 1;
-        }
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-        .card h3{
-            color:var(--neon-cyan);
-            margin-bottom:15px;
-            font-size: 1.5rem;
-        }
-        .card p{
-            color:#ccc;
-            font-size: 1rem;
-            line-height: 1.4;
-        }
-        .actions{
-            margin-top:40px;
-            display:flex;
-            justify-content:center;
-            gap:15px;
-            flex-wrap:wrap;
-        }
-        .btn{
-            padding:14px 25px;
-            border:none;
-            cursor:pointer;
-            border-radius:8px;
-            font-weight:bold;
-            letter-spacing:1px;
-            transition:.3s;
-        }
-        .primary{
-            background:transparent;
-            color:white;
-            border:1px solid var(--neon-cyan);
-        }
-        .primary:hover{
-            background:var(--neon-cyan);
-            color:black;
-        }
-        .logout{
-            background:transparent;
-            color:white;
-            border:1px solid var(--neon-magenta);
-        }
-        .logout:hover{
-            background:var(--neon-magenta);
-        }
-        .footer{
-            text-align:center;
-            padding:30px;
-            color:#888;
-        }
-        #userDisplay{
-            position: fixed;
-            top: 15px;
-            left: 20px;
-            color: #00f3ff;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(0,243,255,.5);
-            z-index: 9999;
-        }
+<title>Software Hub Nexus</title>
 
-        /* Responsive design for tablets and mobile viewports */
-        @media (max-width: 900px) {
-            .dashboard {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .card-profile, .card-projects, .card-analytics, .card-settings {
-                grid-column: span 2;
-                grid-row: auto;
-            }
-        }
-    </style>
+<style>
+
+:root{
+    --bg:#05050a;
+    --panel:rgba(10,10,25,0.75);
+    --cyan:#00f3ff;
+    --magenta:#ff0055;
+    --text:#e0e0ff;
+    --success:#00ff99;
+    --warning:#ffcc00;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
+    min-height:100vh;
+    position:relative;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:
+    linear-gradient(
+        rgba(255,255,255,.03) 1px,
+        transparent 1px
+    ),
+    linear-gradient(
+        90deg,
+        rgba(255,255,255,.03) 1px,
+        transparent 1px
+    );
+    background-size:30px 30px;
+    z-index:-2;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(
+        circle at 15% 20%,
+        rgba(0,243,255,.15),
+        transparent 40%
+    ),
+    radial-gradient(
+        circle at 80% 70%,
+        rgba(255,0,85,.15),
+        transparent 40%
+    );
+    z-index:-1;
+}
+
+header{
+    width:100%;
+    padding:20px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    backdrop-filter:blur(12px);
+    background:rgba(0,0,0,.2);
+    border-bottom:1px solid rgba(0,243,255,.2);
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    letter-spacing:3px;
+    color:white;
+    text-transform:uppercase;
+    text-shadow:0 0 15px var(--cyan);
+}
+
+.user-info{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.user-avatar{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    border:2px solid var(--cyan);
+    box-shadow:0 0 15px var(--cyan);
+}
+
+.dashboard{
+    width:95%;
+    max-width:1600px;
+    margin:auto;
+    padding:30px 0;
+}
+
+.hero{
+    background:var(--panel);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(0,243,255,.15);
+    border-radius:18px;
+    padding:40px;
+    margin-bottom:30px;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:15px;
+    color:white;
+    text-shadow:0 0 20px var(--cyan);
+}
+
+.hero p{
+    opacity:.8;
+    max-width:700px;
+}
+
+.search-panel{
+    margin-top:25px;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.search-panel input{
+    flex:1;
+    min-width:250px;
+    padding:14px;
+    border:none;
+    outline:none;
+    background:rgba(255,255,255,.05);
+    color:white;
+    border-left:4px solid var(--cyan);
+    border-radius:8px;
+}
+
+.cyber-btn{
+    padding:14px 22px;
+    border:none;
+    cursor:pointer;
+    color:white;
+    font-weight:bold;
+    border-radius:8px;
+    background:transparent;
+    border:1px solid var(--cyan);
+    transition:.3s;
+}
+
+.cyber-btn:hover{
+    background:var(--cyan);
+    color:black;
+    box-shadow:0 0 20px var(--cyan);
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:1.4fr .9fr;
+    gap:20px;
+    align-items:start;
+}
+
+.panel,
+.network-panel,
+.globe-panel,
+.storage-panel,
+.activity-panel,
+.quick-panel{
+    background:var(--panel);
+    border:1px solid rgba(0,243,255,.15);
+    border-radius:18px;
+    padding:20px;
+    backdrop-filter:blur(15px);
+}
+
+.panel-title,
+.dashboard-title{
+    color:white;
+    letter-spacing:2px;
+    margin-bottom:15px;
+    text-shadow:0 0 10px var(--cyan);
+}
+
+.library-grid{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fill,minmax(280px,1fr));
+    gap:20px;
+}
+
+.software-card{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(0,243,255,.15);
+    border-radius:14px;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.software-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 25px rgba(0,243,255,.2);
+}
+
+.card-banner{
+    height:140px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:50px;
+    background:
+    linear-gradient(
+    135deg,
+    rgba(0,243,255,.25),
+    rgba(255,0,85,.25)
+    );
+}
+
+.card-content{
+    padding:18px;
+}
+
+.card-actions{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.download-btn,
+.details-btn{
+    flex:1;
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
+    background:transparent;
+}
+
+.download-btn{
+    border:1px solid var(--success);
+    color:var(--success);
+}
+
+.details-btn{
+    border:1px solid var(--cyan);
+    color:var(--cyan);
+}
+/* =========================================
+   RIGHT DASHBOARD
+========================================= */
+
+.right-dashboard{
+    display:grid;
+    grid-template-columns:
+    repeat(2,minmax(250px,1fr));
+    gap:20px;
+    width:100%;
+}
+
+.network-panel,
+.globe-panel,
+.storage-panel,
+.activity-panel,
+.quick-panel{
+    min-height:260px;
+    box-shadow:
+    0 0 25px rgba(0,243,255,.08);
+}
+
+.quick-panel{
+    grid-column:1/3;
+    min-height:auto;
+    display:grid;
+    grid-template-columns:
+    repeat(4,1fr);
+    gap:15px;
+}
+
+.quick-card{
+    background:rgba(255,255,255,.03);
+    border-radius:12px;
+    padding:15px;
+    text-align:center;
+}
+
+.quick-card h2{
+    color:var(--cyan);
+}
+
+.activity-panel ul{
+    list-style:none;
+}
+
+.activity-panel li{
+    padding:10px 0;
+    border-bottom:
+    1px solid rgba(255,255,255,.05);
+}
+
+/* =========================================
+   NETWORK GLOBE
+========================================= */
+
+.cyber-globe{
+    height:280px;
+    overflow:hidden;
+    border-radius:12px;
+}
+
+.cyber-globe img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:12px;
+    filter:
+    brightness(1.1)
+    saturate(1.2);
+}
+
+/* =========================================
+   STORAGE
+========================================= */
+
+.storage-ring{
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    margin:auto;
+
+    background:
+    conic-gradient(
+        #00f3ff 0deg,
+        #00f3ff 220deg,
+        #ff0055 220deg,
+        #ff0055 360deg
+    );
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.storage-center{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    background:#05050a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-weight:bold;
+}
+
+/* =========================================
+   FLOATING UPLOAD BUTTON
+========================================= */
+
+.upload-fab{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+
+    width:75px;
+    height:75px;
+
+    border:none;
+    border-radius:50%;
+
+    cursor:pointer;
+
+    z-index:5000;
+
+    font-size:40px;
+    font-weight:bold;
+    color:white;
+
+    background:
+    linear-gradient(
+        135deg,
+        #00f3ff,
+        #ff0055
+    );
+
+    box-shadow:
+    0 0 25px #00f3ff,
+    0 0 50px rgba(0,243,255,.4);
+
+    transition:.35s;
+}
+
+.upload-fab:hover{
+    transform:
+    scale(1.12)
+    rotate(90deg);
+
+    box-shadow:
+    0 0 40px #00f3ff,
+    0 0 70px #ff0055;
+}
+
+/* =========================================
+   UPLOAD MODAL
+========================================= */
+
+.upload-modal{
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    z-index:99999;
+
+    background:rgba(0,0,0,.75);
+
+    backdrop-filter:blur(15px);
+
+    justify-content:center;
+    align-items:center;
+
+    padding:20px;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.3s;
+}
+
+.upload-modal.active{
+    opacity:1;
+    visibility:visible;
+}
+
+.upload-modal-content{
+    width:100%;
+    max-width:700px;
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(20,20,40,.95),
+        rgba(10,10,25,.95)
+    );
+
+    border:1px solid rgba(0,243,255,.25);
+
+    border-radius:25px;
+
+    padding:30px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 0 40px rgba(0,243,255,.2),
+    0 0 100px rgba(255,0,85,.15);
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.modal-header h2{
+    color:white;
+    text-shadow:
+    0 0 15px #00f3ff;
+}
+
+.close-modal{
+    width:45px;
+    height:45px;
+
+    border:none;
+    border-radius:50%;
+
+    cursor:pointer;
+
+    color:white;
+
+    background:
+    rgba(255,255,255,.08);
+}
+
+.close-modal:hover{
+    background:#ff0055;
+}
+
+.upload-form{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.upload-form input,
+.upload-form textarea,
+.upload-form select{
+    width:100%;
+    padding:12px;
+
+    border:none;
+    outline:none;
+
+    background:
+    rgba(255,255,255,.05);
+
+    color:white;
+
+    border-left:
+    4px solid var(--cyan);
+
+    border-radius:8px;
+}
+
+.upload-form textarea{
+    resize:vertical;
+    min-height:120px;
+}
+
+.file-box{
+    padding:20px;
+
+    border:
+    2px dashed rgba(0,243,255,.3);
+
+    border-radius:10px;
+
+    text-align:center;
+}
+
+/* =========================================
+   MOBILE DASHBOARD BUTTON
+========================================= */
+
+.mobile-dashboard-btn{
+    position:fixed;
+
+    right:20px;
+    bottom:110px;
+
+    width:60px;
+    height:60px;
+
+    border:none;
+    border-radius:50%;
+
+    cursor:pointer;
+
+    z-index:9999;
+
+    font-size:24px;
+
+    color:white;
+
+    background:
+    linear-gradient(
+        135deg,
+        #00f3ff,
+        #ff0055
+    );
+
+    box-shadow:
+    0 0 25px #00f3ff;
+}
+
+/* =========================================
+   MOBILE DASHBOARD MODAL
+========================================= */
+
+.mobile-dashboard-modal{
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:999999;
+
+    background:
+    rgba(0,0,0,.95);
+
+    overflow-y:auto;
+
+    backdrop-filter:blur(15px);
+}
+
+.mobile-dashboard-content{
+    width:100%;
+    min-height:100%;
+    padding:20px;
+}
+
+.mobile-dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.mobile-dashboard-header button{
+    width:45px;
+    height:45px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#ff0055;
+    color:white;
+}
+
+/* =========================================
+   REMOVE BUTTON OUTLINES
+========================================= */
+
+.cyber-btn,
+.download-btn,
+.details-btn,
+.upload-fab,
+.close-modal{
+    outline:none !important;
+    -webkit-tap-highlight-color:
+    transparent;
+}
+
+.cyber-btn:focus,
+.download-btn:focus,
+.details-btn:focus,
+.upload-fab:focus,
+.close-modal:focus{
+    outline:none !important;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media(max-width:1200px){
+
+    .quick-panel{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:900px){
+
+    header{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .right-dashboard{
+        display:none;
+    }
+
+    .hero{
+        padding:25px;
+    }
+
+    .hero h1{
+        font-size:30px;
+    }
+
+    .library-grid{
+        grid-template-columns:1fr;
+    }
+
+    .search-panel{
+        flex-direction:column;
+    }
+
+    .search-panel input{
+        min-width:100%;
+    }
+
+    .upload-modal-content{
+        padding:20px;
+        max-height:90vh;
+        overflow-y:auto;
+    }
+}
+
+/* =========================================
+   DESKTOP
+========================================= */
+
+@media(min-width:901px){
+
+    .mobile-dashboard-btn{
+        display:none;
+    }
+
+    .panel{
+        max-height:85vh;
+        overflow-y:auto;
+    }
+
+}
+</style>
 </head>
+
 <body>
-    <div id="userDisplay"></div>
-    <script>
-        if(localStorage.getItem("loggedIn") !== "true"){
-            window.location.href = "login.html";
-        }
-        const username = localStorage.getItem("username");
-        if(username){
-            document.getElementById("userDisplay").textContent = "User: " + username;
-        }
-    </script>
-    <header>
-        <h1>WELCOME TO THE SOFTWARE MARKET</h1>
-    </header>
-    <div class="container">
-        <div class="dashboard">
-            <div class="card card-profile">
-                <h3>Profile</h3>
-                <p>Manage your account information, update personal configurations, security credentials, and API access tokens.</p>
-            </div>
-            <div class="card card-projects">
-                <h3>Projects</h3>
-                <p>Access all your current projects and operational deployments.</p>
-            </div>
-            <div class="card card-analytics">
-                <h3>Analytics</h3>
-                <p>View real-time statistics and activity reports.</p>
-            </div>
-            <div class="card card-settings">
-                <h3>Settings</h3>
-                <p>Configure your portal market preferences.</p>
-            </div>
-        </div>
-        <div class="actions">
-            <button class="btn primary"> Open Dashboard </button>
-            <button class="btn logout" onclick="logout()"> Logout </button>
-        </div>
+
+<header>
+
+    <div class="logo">
+        SOFTWARE HUB
     </div>
-    <div class="footer">
-        Secure Access Portal
+
+    <div class="user-info">
+
+        <span id="currentUser">
+            Pilot
+        </span>
+
+        <div class="user-avatar"></div>
+
     </div>
-    <script>
-        function logout(){
-            localStorage.removeItem("loggedIn");
-            localStorage.removeItem("username");
-            window.location.href = "index.html";
+
+</header>
+
+<div class="dashboard">
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <h1>
+            Decentralized Software Nexus
+        </h1>
+
+        <p>
+            Upload, share and distribute software
+            through the network.
+            Local-first storage architecture.
+        </p>
+
+        <div class="search-panel">
+
+            <input
+                type="text"
+                id="searchBox"
+                placeholder="Search software..."
+            >
+
+            <button
+                class="cyber-btn"
+                onclick="searchSoftware()"
+            >
+                Search
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- MAIN LAYOUT -->
+
+    <div class="layout">
+
+        <!-- SOFTWARE LIBRARY COLUMN -->
+
+        <div class="panel">
+
+            <div class="panel-title">
+                Software Library
+            </div>
+
+            <div
+                id="softwareGrid"
+                class="library-grid"
+            >
+
+                <!-- SOFTWARE CARDS LOAD HERE -->
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT DASHBOARD COLUMN -->
+
+        <div class="right-dashboard">
+
+            <!-- NETWORK STATUS -->
+
+            <div class="network-panel">
+
+                <div class="dashboard-title">
+                    NETWORK STATUS
+                </div>
+
+                <div style="margin-top:20px;">
+
+                    <p>Connected Peers</p>
+
+                    <h1
+                        id="peerCount"
+                        style="color:#00f3ff;"
+                    >
+                        128
+                    </h1>
+
+                    <br>
+
+                    <p>Network Health</p>
+
+                    <h1 style="color:#00f3ff;">
+                        98%
+                    </h1>
+
+                    <br>
+
+                    <p>Storage Nodes</p>
+
+                    <h1 style="color:#00f3ff;">
+                        42
+                    </h1>
+
+                </div>
+
+            </div>
+
+            <!-- NETWORK MAP -->
+
+            <div class="globe-panel">
+
+                <div class="dashboard-title">
+                    NETWORK MAP
+                </div>
+
+                <div class="cyber-globe">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1639322537228-f710d846310a?w=800"
+                        alt="Network Globe"
+                    >
+
+                </div>
+
+            </div>
+
+            <!-- STORAGE -->
+
+            <div class="storage-panel">
+
+                <div class="dashboard-title">
+                    STORAGE
+                </div>
+
+                <div class="storage-ring">
+
+                    <div class="storage-center">
+                        2.45 TB
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ACTIVITY -->
+
+            <div class="activity-panel">
+
+                <div class="dashboard-title">
+                    RECENT ACTIVITY
+                </div>
+
+                <ul id="activityFeed">
+
+                    <li>
+                        Cyber Studio uploaded
+                    </li>
+
+                    <li>
+                        Quantum Player downloaded
+                    </li>
+
+                    <li>
+                        Secure Vault updated
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <!-- QUICK STATS -->
+
+            <div class="quick-panel">
+
+                <div class="quick-card">
+
+                    <h2 id="softwareCount">
+                        0
+                    </h2>
+
+                    <span>
+                        Total Software
+                    </span>
+
+                </div>
+
+                <div class="quick-card">
+
+                    <h2>
+                        342
+                    </h2>
+
+                    <span>
+                        Downloads
+                    </span>
+
+                </div>
+
+                <div class="quick-card">
+
+                    <h2>
+                        128
+                    </h2>
+
+                    <span>
+                        Peers
+                    </span>
+
+                </div>
+
+                <div class="quick-card">
+
+                    <h2>
+                        1.2Gbps
+                    </h2>
+
+                    <span>
+                        Network
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+     SOFTWARE DETAILS MODAL
+========================================= -->
+
+<div
+    id="softwareModal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.85);
+        z-index:9999;
+        justify-content:center;
+        align-items:center;
+        padding:20px;
+    "
+>
+
+    <div
+        style="
+            width:100%;
+            max-width:700px;
+            background:rgba(10,10,25,.95);
+            border:1px solid rgba(0,243,255,.3);
+            border-radius:18px;
+            padding:30px;
+            backdrop-filter:blur(20px);
+        "
+    >
+
+        <h2
+            id="modalTitle"
+            style="
+                margin-bottom:15px;
+                color:white;
+                text-shadow:0 0 15px #00f3ff;
+            "
+        >
+            Software Name
+        </h2>
+
+        <p
+            id="modalDeveloper"
+            style="margin-bottom:10px;opacity:.8;"
+        ></p>
+
+        <p
+            id="modalCategory"
+            style="margin-bottom:10px;opacity:.8;"
+        ></p>
+
+        <p
+            id="modalDate"
+            style="margin-bottom:20px;opacity:.8;"
+        ></p>
+
+        <div
+            id="modalDescription"
+            style="
+                line-height:1.7;
+                margin-bottom:20px;
+            "
+        ></div>
+
+        <div
+            style="
+                display:flex;
+                gap:10px;
+            "
+        >
+
+            <button
+                class="download-btn"
+                onclick="downloadCurrentSoftware()"
+            >
+                Download
+            </button>
+
+            <button
+                class="details-btn"
+                onclick="closeModal()"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+     UPLOAD SOFTWARE MODAL
+========================================= -->
+
+<div
+    id="uploadModal"
+    class="upload-modal"
+>
+
+    <div
+        class="upload-modal-content"
+    >
+
+        <div class="modal-header">
+
+            <h2>
+                Upload Software
+            </h2>
+
+            <button
+                onclick="closeUploadModal()"
+                class="close-modal"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <form
+            id="uploadForm"
+            class="upload-form"
+        >
+
+            <input
+                type="text"
+                id="softwareName"
+                placeholder="Software Name"
+            >
+
+            <input
+                type="text"
+                id="developer"
+                placeholder="Developer"
+            >
+
+            <select id="category">
+
+                <option value="">
+                    Category
+                </option>
+
+                <option>
+                    Utilities
+                </option>
+
+                <option>
+                    Development
+                </option>
+
+                <option>
+                    Security
+                </option>
+
+                <option>
+                    Education
+                </option>
+
+                <option>
+                    Multimedia
+                </option>
+
+            </select>
+
+            <textarea
+                id="description"
+                placeholder="Description"
+            ></textarea>
+
+            <div class="file-box">
+
+                <input
+                    type="file"
+                    id="softwareFile"
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="cyber-btn"
+            >
+                Upload Software
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+     MOBILE DASHBOARD MODAL
+========================================= -->
+
+<div
+    id="mobileDashboardModal"
+    class="mobile-dashboard-modal"
+>
+
+    <div
+        class="mobile-dashboard-content"
+    >
+
+        <div
+            class="mobile-dashboard-header"
+        >
+
+            <h2>
+                Network Dashboard
+            </h2>
+
+            <button
+                onclick="closeMobileDashboard()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div
+            id="mobileDashboardContainer"
+        ></div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+     FLOATING BUTTONS
+========================================= -->
+
+<button
+    id="uploadFab"
+    class="upload-fab"
+>
+    +
+</button>
+
+<button
+    id="mobileDashboardBtn"
+    class="mobile-dashboard-btn"
+>
+    📊
+</button>
+
+<script>
+
+const DB_NAME = "SoftwareHubDB";
+const DB_VERSION = 1;
+
+let softwareList = [];
+let selectedSoftware = null;
+
+/* =========================================
+   INDEXEDDB INITIALIZATION
+========================================= */
+
+function openDB(){
+
+    return new Promise((resolve,reject)=>{
+
+        const request =
+        indexedDB.open(
+            DB_NAME,
+            DB_VERSION
+        );
+
+        request.onupgradeneeded =
+        (event)=>{
+
+            const db =
+            event.target.result;
+
+            if(
+                !db.objectStoreNames.contains(
+                    "software"
+                )
+            ){
+
+                db.createObjectStore(
+                    "software",
+                    {
+                        keyPath:"id"
+                    }
+                );
+
+            }
+
+        };
+
+        request.onsuccess =
+        ()=>resolve(
+            request.result
+        );
+
+        request.onerror =
+        ()=>reject(
+            request.error
+        );
+
+    });
+
+}
+
+/* =========================================
+   SAVE SOFTWARE
+========================================= */
+
+async function saveSoftware(data){
+
+    const db =
+    await openDB();
+
+    const tx =
+    db.transaction(
+        "software",
+        "readwrite"
+    );
+
+    const store =
+    tx.objectStore(
+        "software"
+    );
+
+    store.put(data);
+
+}
+
+/* =========================================
+   LOAD SOFTWARE
+========================================= */
+
+async function loadSoftware(){
+
+    const db =
+    await openDB();
+
+    const tx =
+    db.transaction(
+        "software",
+        "readonly"
+    );
+
+    const store =
+    tx.objectStore(
+        "software"
+    );
+
+    return new Promise(resolve=>{
+
+        const request =
+        store.getAll();
+
+        request.onsuccess =
+        ()=>resolve(
+            request.result
+        );
+
+        request.onerror =
+        ()=>resolve([]);
+
+    });
+
+}
+/* =========================================
+   UPLOAD SOFTWARE
+========================================= */
+
+document
+.getElementById("uploadForm")
+.addEventListener(
+    "submit",
+    async function(e){
+
+        e.preventDefault();
+
+        const name =
+        document
+        .getElementById(
+            "softwareName"
+        )
+        .value
+        .trim();
+
+        const developer =
+        document
+        .getElementById(
+            "developer"
+        )
+        .value
+        .trim();
+
+        const category =
+        document
+        .getElementById(
+            "category"
+        )
+        .value;
+
+        const description =
+        document
+        .getElementById(
+            "description"
+        )
+        .value
+        .trim();
+
+        const file =
+        document
+        .getElementById(
+            "softwareFile"
+        )
+        .files[0];
+
+        if(
+            !name ||
+            !developer ||
+            !category ||
+            !file
+        ){
+
+            alert(
+                "Please complete all required fields."
+            );
+
+            return;
         }
-    </script>
+
+        const software = {
+
+            id: Date.now(),
+
+            name,
+
+            developer,
+
+            category,
+
+            description,
+
+            fileName:
+            file.name,
+
+            fileSize:
+            file.size,
+
+            uploadDate:
+            new Date()
+            .toLocaleString()
+
+        };
+
+        await saveSoftware(
+            software
+        );
+
+        await renderSoftware();
+
+        alert(
+            "Software uploaded successfully."
+        );
+
+        this.reset();
+
+        closeUploadModal();
+
+    }
+);
+
+/* =========================================
+   RENDER SOFTWARE
+========================================= */
+
+async function renderSoftware(){
+
+    softwareList =
+    await loadSoftware();
+
+    const grid =
+    document.getElementById(
+        "softwareGrid"
+    );
+
+    if(!grid) return;
+
+    grid.innerHTML = "";
+
+    const softwareCounter =
+    document.getElementById(
+        "softwareCount"
+    );
+
+    if(softwareCounter){
+
+        softwareCounter.innerText =
+        softwareList.length;
+
+    }
+
+    softwareList.forEach(
+        software=>{
+
+            const card =
+            document.createElement(
+                "div"
+            );
+
+            card.className =
+            "software-card";
+
+            card.innerHTML = `
+
+                <div class="card-banner">
+                    💾
+                </div>
+
+                <div class="card-content">
+
+                    <h3>
+                        ${software.name}
+                    </h3>
+
+                    <div class="card-meta">
+                        ${software.developer}
+                    </div>
+
+                    <div class="card-meta">
+                        ${software.category}
+                    </div>
+
+                    <div class="card-actions">
+
+                        <button
+                            class="download-btn"
+                            onclick="downloadSoftware(${software.id})"
+                        >
+                            Download
+                        </button>
+
+                        <button
+                            class="details-btn"
+                            onclick="showDetails(${software.id})"
+                        >
+                            Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            grid.appendChild(
+                card
+            );
+
+        });
+
+}
+
+/* =========================================
+   SEARCH SOFTWARE
+========================================= */
+
+function searchSoftware(){
+
+    const query =
+    document
+    .getElementById(
+        "searchBox"
+    )
+    .value
+    .toLowerCase()
+    .trim();
+
+    const cards =
+    document.querySelectorAll(
+        ".software-card"
+    );
+
+    cards.forEach(card=>{
+
+        const text =
+        card.innerText
+        .toLowerCase();
+
+        if(
+            text.includes(query)
+        ){
+
+            card.style.display =
+            "block";
+
+        }
+
+        else{
+
+            card.style.display =
+            "none";
+
+        }
+
+    });
+
+}
+
+/* =========================================
+   LIVE SEARCH
+========================================= */
+
+document
+.addEventListener(
+    "DOMContentLoaded",
+    ()=>{
+
+        const searchBox =
+        document.getElementById(
+            "searchBox"
+        );
+
+        if(searchBox){
+
+            searchBox.addEventListener(
+                "input",
+                searchSoftware
+            );
+
+        }
+
+    }
+);
+
+/* =========================================
+   SHOW SOFTWARE DETAILS
+========================================= */
+
+function showDetails(id){
+
+    const software =
+    softwareList.find(
+        s => s.id === id
+    );
+
+    if(!software) return;
+
+    selectedSoftware =
+    software;
+
+    document.getElementById(
+        "modalTitle"
+    ).innerText =
+    software.name;
+
+    document.getElementById(
+        "modalDeveloper"
+    ).innerHTML =
+    "<strong>Developer:</strong> " +
+    software.developer;
+
+    document.getElementById(
+        "modalCategory"
+    ).innerHTML =
+    "<strong>Category:</strong> " +
+    software.category;
+
+    document.getElementById(
+        "modalDate"
+    ).innerHTML =
+    "<strong>Uploaded:</strong> " +
+    software.uploadDate;
+
+    document.getElementById(
+        "modalDescription"
+    ).innerText =
+    software.description ||
+    "No description available.";
+
+    document.getElementById(
+        "softwareModal"
+    ).style.display =
+    "flex";
+
+}
+
+/* =========================================
+   CLOSE DETAILS MODAL
+========================================= */
+
+function closeModal(){
+
+    document.getElementById(
+        "softwareModal"
+    ).style.display =
+    "none";
+
+}
+
+/* =========================================
+   DOWNLOAD SOFTWARE
+========================================= */
+
+function downloadSoftware(id){
+
+    const software =
+    softwareList.find(
+        s => s.id === id
+    );
+
+    if(!software){
+
+        alert(
+            "Software not found."
+        );
+
+        return;
+
+    }
+
+    alert(
+
+        "Prototype Download Mode\n\n" +
+
+        "Software:\n" +
+        software.name +
+
+        "\n\nDeveloper:\n" +
+        software.developer +
+
+        "\n\nFuture Version Features:\n" +
+
+        "• Direct File Download\n" +
+        "• WebRTC P2P Transfer\n" +
+        "• Distributed Storage\n" +
+        "• Node Mirroring\n" +
+        "• Resume Support"
+
+    );
+
+}
+
+/* =========================================
+   DOWNLOAD FROM MODAL
+========================================= */
+
+function downloadCurrentSoftware(){
+
+    if(
+        !selectedSoftware
+    ){
+
+        alert(
+            "No software selected."
+        );
+
+        return;
+
+    }
+
+    downloadSoftware(
+        selectedSoftware.id
+    );
+
+}
+
+/* =========================================
+   CLOSE MODAL ON ESC
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(
+            e.key === "Escape"
+        ){
+
+            closeModal();
+
+        }
+
+    }
+);
+
+/* =========================================
+   CLOSE MODAL ON BACKGROUND CLICK
+========================================= */
+
+document.addEventListener(
+    "click",
+    function(e){
+
+        const modal =
+        document.getElementById(
+            "softwareModal"
+        );
+
+        if(
+            e.target === modal
+        ){
+
+            closeModal();
+
+        }
+
+    }
+);
+/* =========================================
+   LOAD USER
+========================================= */
+
+function loadUser(){
+
+    const username =
+    localStorage.getItem(
+        "username"
+    );
+
+    if(username){
+
+        const userElement =
+        document.getElementById(
+            "currentUser"
+        );
+
+        if(userElement){
+
+            userElement.innerText =
+            username;
+
+        }
+
+    }
+
+}
+
+/* =========================================
+   CREATE DEMO DATA
+========================================= */
+
+async function createDemoData(){
+
+    const existing =
+    await loadSoftware();
+
+    if(
+        existing.length > 0
+    ){
+
+        return;
+
+    }
+
+    const demoApps = [
+
+        {
+            id:1,
+
+            name:"Cyber Studio",
+
+            developer:"Nexus Labs",
+
+            category:"Development",
+
+            description:
+            "Advanced futuristic development toolkit.",
+
+            fileName:
+            "cyberstudio.zip",
+
+            fileSize:
+            24500000,
+
+            uploadDate:
+            new Date().toLocaleString()
+        },
+
+        {
+            id:2,
+
+            name:"Quantum Player",
+
+            developer:"Media Core",
+
+            category:"Multimedia",
+
+            description:
+            "High-performance media player with futuristic rendering engine.",
+
+            fileName:
+            "quantumplayer.exe",
+
+            fileSize:
+            18500000,
+
+            uploadDate:
+            new Date().toLocaleString()
+        },
+
+        {
+            id:3,
+
+            name:"Secure Vault",
+
+            developer:"Security Systems",
+
+            category:"Security",
+
+            description:
+            "Encrypted storage and password management solution.",
+
+            fileName:
+            "securevault.exe",
+
+            fileSize:
+            12000000,
+
+            uploadDate:
+            new Date().toLocaleString()
+        }
+
+    ];
+
+    for(const app of demoApps){
+
+        await saveSoftware(
+            app
+        );
+
+    }
+
+}
+
+/* =========================================
+   NETWORK LAYER
+========================================= */
+
+const NetworkLayer = {
+
+    initialized:false,
+
+    async initialize(){
+
+        console.log(
+            "Future P2P Network Layer"
+        );
+
+        console.log(
+            "Ready for:"
+        );
+
+        console.log(
+            "- WebRTC"
+        );
+
+        console.log(
+            "- Peer Discovery"
+        );
+
+        console.log(
+            "- Decentralized Storage"
+        );
+
+        console.log(
+            "- Distributed Downloads"
+        );
+
+        console.log(
+            "- Distributed Uploads"
+        );
+
+        console.log(
+            "- File Mirroring"
+        );
+
+        this.initialized =
+        true;
+
+    }
+
+};
+
+/* =========================================
+   NETWORK STATUS ANIMATION
+========================================= */
+
+function startNetworkSimulation(){
+
+    setInterval(()=>{
+
+        const peerCount =
+        document.getElementById(
+            "peerCount"
+        );
+
+        if(!peerCount){
+
+            return;
+
+        }
+
+        peerCount.innerText =
+        120 +
+        Math.floor(
+            Math.random() * 20
+        );
+
+    },4000);
+
+}
+
+/* =========================================
+   ACTIVITY FEED SIMULATION
+========================================= */
+
+function startActivitySimulation(){
+
+    const activities = [
+
+        "Cyber Studio uploaded",
+        "Quantum Player downloaded",
+        "Secure Vault updated",
+        "Peer node connected",
+        "Storage synchronized",
+        "File mirrored",
+        "Network optimized",
+        "New software discovered"
+
+    ];
+
+    setInterval(()=>{
+
+        const feed =
+        document.getElementById(
+            "activityFeed"
+        );
+
+        if(!feed){
+
+            return;
+
+        }
+
+        const item =
+        document.createElement(
+            "li"
+        );
+
+        item.innerText =
+        activities[
+            Math.floor(
+                Math.random() *
+                activities.length
+            )
+        ];
+
+        feed.prepend(item);
+
+        while(
+            feed.children.length > 8
+        ){
+
+            feed.removeChild(
+                feed.lastChild
+            );
+
+        }
+
+    },10000);
+
+}
+/* =========================================
+   UPLOAD MODAL OPEN
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    ()=>{
+
+        const uploadFab =
+        document.getElementById(
+            "uploadFab"
+        );
+
+        if(uploadFab){
+
+            uploadFab.addEventListener(
+                "click",
+                ()=>{
+
+                    const modal =
+                    document.getElementById(
+                        "uploadModal"
+                    );
+
+                    modal.style.display =
+                    "flex";
+
+                    setTimeout(()=>{
+
+                        modal.classList.add(
+                            "active"
+                        );
+
+                    },10);
+
+                }
+            );
+
+        }
+
+    }
+);
+
+/* =========================================
+   CLOSE UPLOAD MODAL
+========================================= */
+
+function closeUploadModal(){
+
+    const modal =
+    document.getElementById(
+        "uploadModal"
+    );
+
+    if(!modal) return;
+
+    modal.classList.remove(
+        "active"
+    );
+
+    setTimeout(()=>{
+
+        modal.style.display =
+        "none";
+
+    },300);
+
+}
+
+/* =========================================
+   CLICK OUTSIDE UPLOAD MODAL
+========================================= */
+
+document.addEventListener(
+    "click",
+    function(e){
+
+        const modal =
+        document.getElementById(
+            "uploadModal"
+        );
+
+        if(
+            e.target === modal
+        ){
+
+            closeUploadModal();
+
+        }
+
+    }
+);
+
+/* =========================================
+   MOBILE DASHBOARD
+========================================= */
+
+function openMobileDashboard(){
+
+    const modal =
+    document.getElementById(
+        "mobileDashboardModal"
+    );
+
+    const container =
+    document.getElementById(
+        "mobileDashboardContainer"
+    );
+
+    const dashboard =
+    document.querySelector(
+        ".right-dashboard"
+    );
+
+    if(
+        !modal ||
+        !container ||
+        !dashboard
+    ){
+
+        return;
+
+    }
+
+    container.innerHTML =
+    dashboard.innerHTML;
+
+    modal.style.display =
+    "block";
+
+}
+
+function closeMobileDashboard(){
+
+    const modal =
+    document.getElementById(
+        "mobileDashboardModal"
+    );
+
+    if(modal){
+
+        modal.style.display =
+        "none";
+
+    }
+
+}
+
+/* =========================================
+   MOBILE BUTTON EVENT
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    ()=>{
+
+        const mobileBtn =
+        document.getElementById(
+            "mobileDashboardBtn"
+        );
+
+        if(!mobileBtn){
+
+            return;
+
+        }
+
+        mobileBtn.addEventListener(
+            "click",
+            openMobileDashboard
+        );
+
+    }
+);
+
+/* =========================================
+   APP STARTUP
+========================================= */
+
+window.addEventListener(
+    "load",
+    async ()=>{
+
+        try{
+
+            loadUser();
+
+            await createDemoData();
+
+            await renderSoftware();
+
+            await NetworkLayer.initialize();
+
+            startNetworkSimulation();
+
+            startActivitySimulation();
+
+            console.log(
+                "Software Hub Ready"
+            );
+
+        }
+
+        catch(error){
+
+            console.error(
+                "Startup Error:",
+                error
+            );
+
+        }
+
+    }
+);
+
+/* =========================================
+   GLOBAL ESCAPE KEY
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(
+            e.key === "Escape"
+        ){
+
+            closeModal();
+
+            closeUploadModal();
+
+            closeMobileDashboard();
+
+        }
+
+    }
+);
+
+</script>
+
 </body>
 </html>
